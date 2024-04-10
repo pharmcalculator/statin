@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statin Dose Conversion Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+        select, input {
+            font-size: 16px; /* Increase font size */
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #calculate-btn {
+            padding: 15px 30px; /* Increase button padding */
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            border-radius: 8px; /* Rounded corners */
+        }
+        #result {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .disclaimer {
+            color: red;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Statin Dose Conversion Calculator</h1>
+    <div class="input-group">
+        <label for="statin">Select Statin:</label>
+        <select id="statin">
+            <option value="atorvastatin">Atorvastatin (Lipitor)</option>
+            <option value="rosuvastatin">Rosuvastatin (Crestor)</option>
+            <option value="simvastatin">Simvastatin (Zocor)</option>
+            <option value="pravastatin">Pravastatin (Pravachol)</option>
+            <option value="lovastatin">Lovastatin (Mevacor)</option>
+            <option value="fluvastatin">Fluvastatin (Lescol)</option>
+        </select>
+    </div>
+    <div class="input-group">
+        <label for="strength">Select Strength:</label>
+        <select id="strength">
+            <option value="10">10 mg</option>
+            <option value="20">20 mg</option>
+            <option value="40">40 mg</option>
+            <option value="80">80 mg</option>
+        </select>
+    </div>
+    <button id="calculate-btn" onclick="convertDose()">Calculate for Atorvastatin</button>
+    <p id="result"></p>
+    <div class="disclaimer">
+        Disclaimer: This calculator is for informational purposes only and should not replace professional medical advice. Always consult with a healthcare professional for accurate dosing recommendations.
+    </div>
+
+    <script>
+        const statinDoses = {
+            'atorvastatin': {'10': 1, '20': 2, '40': 4, '80': 8},
+            'rosuvastatin': {'5': 1, '10': 2, '20': 4, '40': 8},
+            'simvastatin': {'5': 0.5, '10': 1, '20': 2, '40': 4, '80': 8},
+            'pravastatin': {'10': 0.2, '20': 0.4, '40': 0.8, '80': 1.6},
+            'lovastatin': {'10': 0.6, '20': 1.2, '40': 2.4, '80': 4.8},
+            'fluvastatin': {'20': 0.4, '40': 0.8, '80': 1.6}
+        };
+
+        function convertDose() {
+            const statin = document.getElementById('statin').value;
+            const strength = document.getElementById('strength').value;
+            const result = document.getElementById('result');
+
+            const statinEquiv = statinDoses[statin][strength];
+            if (!statinEquiv) {
+                result.textContent = `Invalid dose for ${statin} ${strength} mg.`;
+                return;
+            }
+
+            const atorvastatinEquiv = Object.entries(statinDoses['atorvastatin'])
+                .find(([, value]) => value >= statinEquiv)?.[0];
+
+            if (!atorvastatinEquiv) {
+                result.textContent = `Could not find an equivalent dose for ${statin} ${strength} mg in atorvastatin.`;
+            } else {
+                result.textContent = `Equivalent dose of Atorvastatin (${atorvastatinEquiv} mg) for ${statin} ${strength} mg`;
+            }
+        }
+    </script>
+</body>
+</html>
